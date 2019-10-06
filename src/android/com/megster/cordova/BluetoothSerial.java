@@ -458,7 +458,7 @@ public class BluetoothSerial extends CordovaPlugin {
             cordova.startActivityForResult(this, intent, REQUEST_ENABLE_BLUETOOTH);
 
         } else if (action.equals(DISCOVER_UNPAIRED)) {
-
+            callbackContext.error("Uncomment android.permission.ACCESS_COARSE_LOCATION in plugin.xml");
             if (cordova.hasPermission(ACCESS_COARSE_LOCATION)) {
                 discoverUnpairedDevices(callbackContext);
             } else {
