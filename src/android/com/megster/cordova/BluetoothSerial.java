@@ -272,7 +272,7 @@ public class BluetoothSerial extends CordovaPlugin {
             if(cc!=null)
             {
                 cc.connectCallback = null;
-                cc.bluetoothSerialService.stop();
+                cc.bluetoothSerialService.stop("action.equals(DISCONNECT)");
                 callbackContext.success();
             }
 
@@ -521,7 +521,7 @@ public class BluetoothSerial extends CordovaPlugin {
         super.onDestroy();
         for(ConnectionContext conn : connections.values())
         {
-            conn.bluetoothSerialService.stop();
+            conn.bluetoothSerialService.stop("onDestroy");
 
         }
     }
@@ -586,6 +586,7 @@ public class BluetoothSerial extends CordovaPlugin {
 
     private void connect(CordovaArgs args, boolean secure, CallbackContext callbackContext) throws JSONException {
         String macAddress = args.getString(0);
+        boolean tryFallback = args.getBoolean(1);
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
         defaultMac=macAddress;
         if (!connections.containsKey(macAddress)) {
@@ -595,7 +596,7 @@ public class BluetoothSerial extends CordovaPlugin {
 
         if (device != null) {
             cc.connectCallback = callbackContext;
-            cc.bluetoothSerialService.connect(device, secure);
+            cc.bluetoothSerialService.connect(device, secure, tryFallback);
             cc.buffer.setLength(0);
 
             PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
